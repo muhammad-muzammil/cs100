@@ -1,0 +1,255 @@
+//LIBRARIES :
+
+
+// for commands like "cout" and "cin"
+#include<iostream>
+
+//fstream deal with files that can one can write to and read from.
+//there are two types of fstream files, one is ifstream, which is used to read from a file
+//the other is ofstream ,which is used to write in a file
+//both will be used later in the code
+//the fstream library has both the functions
+#include<fstream>
+
+//generating random numbers/ using the system ("cls | clear") command
+#include<stdlib.h>
+
+using namespace std;
+
+// FUNCTION LIST
+
+/* the login function will take input from the user for his/her username and password and check in the text file "database.txt that if it is present
+in it, if present the user will login*/
+void login();
+
+/* the register function will take input from the user for his/her username and password and save them into the text file */
+void registr();
+
+/* the forgot function will help the user find his/her password or username if they remember atleast one out of the two */
+void forgot();
+
+//MAIN FUNCTION
+
+int main()
+{
+
+    // an integer variable named "choice" is declared so that the input can be taken afterwards for what the user wants to do
+    int choice;
+
+    //cout statement prints output on the screen
+    cout<< "                         LOGIN PAGE                          "<<endl<<endl<<endl;
+    cout<< "1 login : "<<endl <<endl;
+    cout<< "2 register : "<<endl<<endl;
+    cout<< "3 Forgot password/username ? "<<endl<<endl;
+    cout<< "enter your choice : ";
+
+    //cin will take in input for the variable "choice"
+    cin >>choice;
+
+    // if the choice is 1, the code will enter the login function
+    if( choice == 1 )
+    {
+        //the login function is of type "void" , and void functions do not need to be passed parameters , hence the empty brackets.
+        login();
+    }
+
+    //if the choice is not one, the code will check if it is 2, if it is 2, the registr funtion will be called
+    else if( choice == 2)
+    {
+        registr();
+    }
+
+    // if it is 3, the forgot function is called
+    else if ( choice == 3 )
+    {
+        forgot();
+    }
+
+    //if it is not any from 1,2,3 the user has probably entered wrong input and they will be made to enter input again
+    else
+    {
+        cout<< "please enter correct input! "<<endl;
+        main();
+    }
+
+
+}
+
+//This is the register function as declared above
+
+void registr()
+{
+    //Two variables, namely username and password are generated of datatype "string"
+    string username , password;
+
+    //the input screen is cleared so the program is neat
+    system ("cls | clear");
+
+    //inputs for username and password are taken
+    cout<< "enter username : ";
+    cin >> username;
+    cout<< "enter password : ";
+    cin >> password;
+
+    //ofstream is used as we want to write on a file
+    //the name of the file is "reg"
+    //it will store the data in a file named database.txt
+    ofstream reg("database.txt");
+    reg << username << " " << password<<endl; // this is the syntax for inputting data from the user to store the data in the file
+    //The data will stored as :  one user will be assigned one line and the start of line will have the username, followed by a space
+    //after the space there will be a password
+
+    //screen is cleared again
+    system( "cls | clear");
+
+    //message to ensure that registeration was successful
+    cout<< "registeration successful! Thank you! "<<endl;
+
+    //the main function is called so that the user can login again or another user can use the program
+    main();
+}
+
+//This is the login function as declared above
+
+void login()
+{
+    //A boolean valiable is created so that we can check if the details exist or not, set initially to false
+    bool exist = false;
+
+    // four string variables are created
+    // "user" is for the username of the user
+    // "pass" is for the password of the user
+    //
+    string user, pass , u , p;
+
+    system("cls|clear");
+
+    cout<< "enter username : ";
+    cin >>user;
+
+    cout<< "enter password : ";
+    cin >> pass;
+
+    ifstream input ("database.txt");
+
+    while( input >> u >> p)
+    {
+        if ( u == user && p == pass)
+        {
+            exist = true;
+            break;
+        }
+    }
+    input.close();
+
+    if ( exist == true )
+    {
+        cout << "login is successful "<<endl;
+        cin.get();
+        cin.get();
+        main();
+    }
+
+    else
+    {
+        cout<<"login unsuccessful. try again " <<endl;
+        cin.get();
+        cin.get();
+        main();
+    }
+}
+
+void forgot()
+{
+    int ch;
+    system("cls|clear");
+    cout<< "1 - Search account by username "<<endl;
+    cout<< "2 Search account by password"<<endl;
+    cout<< "enter choice : ";
+    cin >>ch;
+
+    switch (ch)
+    {
+        case 1:
+        {
+            int ex = 0 ;
+            string searchusername , su , sp;
+            cout<< "enter your username : ";
+            cin >> searchusername;
+
+            ifstream searchu("database.txt");
+
+            while ( searchu >> su >> sp)
+            {
+                if( su == searchusername)
+                {
+                    ex = 1;
+                    break;
+                }
+            }
+            searchu.close();
+
+            if(ex ==1)
+            {
+                cout<< "your account is found"<<endl;
+                cout<< "your password is : "<<sp;
+                cin.get();
+                cin.get();
+                main();
+            }
+
+            else
+            {
+                cout<< "your account was not found"<<endl;
+                cin.get();
+                cin.get();
+                main();
+            }
+
+            break;
+        }
+            case 2:
+            {
+                int exi = 0;
+                string searchpassword, su2 , sp2;
+                cout<< "enter password : ";
+                cin >> searchpassword;
+
+                ifstream searchp("database.txt");
+                while( searchp >> su2 >> sp2)
+                {
+                    if( sp2 == searchpassword)
+                    {
+                        exi = 1;
+                        break;
+                    }
+                }
+                searchp.close();
+                if (exi == 1)
+                {
+                    cout<< "account found! "<<endl;
+                    cout<< "user name is : "<<su2;
+                    cin.get();
+                    cin.get();
+                    main();
+                }
+                break;
+            }
+
+            case 3:
+            {
+                main();
+                break;
+            }
+
+            case 4:
+            {
+                cout<< "wrong input , try again";
+                cin.get();
+                cin.get();
+                forgot();
+            }
+    }
+
+}
+
