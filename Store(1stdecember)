@@ -1,0 +1,309 @@
+#include <iostream>
+#include <fstream>
+#include <stdlib.h>
+#include<iomanip>
+using namespace std;
+
+int choice;
+
+void mainmenu();
+void membership();
+void administratorlogin();
+void administratormenu();
+void login();
+void displayitem();
+void itemmenu ();
+void modifyitem ();
+void deleteitem ();
+void registerr();
+void createitem();
+void customermenu();
+void bill();
+
+int main()
+{
+    cout << "           ******************WELCOME TO THE STORE********************"<<endl <<endl<<endl;
+    mainmenu();
+/*
+    string inputpassword;
+    cout<< "Enter the admin password to access the administration menu. ";
+    cin >> inputpassword;
+    if( administratorlogin(inputpassword) == true)
+        administratormenu();
+
+    else if ( administratorlogin(inputpassword) == false)
+    {
+        cout << "incorrect password."<<endl <<endl;
+        cout << "1 - Try again"<<endl;
+        cout << "2 - Main menu"<<endl;
+
+        cin >> choice;
+
+        if ( choice == 1)
+        {
+            system("cls|clear");
+            administratorlogin();
+        }
+
+        else if ( choice == 2)
+        {
+            system ("cls | clear");
+            mainmenu();
+        }
+    }
+*/
+}
+
+void mainmenu()
+{
+    system("cls|clear");
+    cout << "            MAIN MENU       "<<endl;
+    cout << endl <<endl;
+
+    cout << "                    1 - CUSTOMER               "<<endl<<endl;
+    cout << "                    2 - ADMINISTRATOR          "<<endl<<endl;
+    cout << "                    3-  EXIT                   "<<endl << endl<<endl;
+
+    cout << "                    Enter your choice : ";
+    cin >> choice;
+
+    if ( choice == 1)
+        membership();
+    else if ( choice == 2)
+        administratorlogin();
+    else if ( choice == 3)
+        exit(0);
+    else
+    {
+        system("cls|clear");
+        cout << "you entered an invalid choice." <<endl;
+        cout << "Try again." <<endl;
+        mainmenu();
+    }
+}
+
+void membership()
+{
+    system("cls|clear");
+    cout << "Do you want to login or register ?" <<endl;
+    cout << " 1 - Login "<<endl;
+    cout << " 2 - Register " <<endl;
+    cin >> choice;
+    if ( choice == 1)
+        login();
+
+    else if ( choice == 2)
+        registerr();
+
+    else
+    {
+        system("cls|clear");
+        cout << "wrong choice . please try again .";
+        membership();
+    }
+}
+
+void registerr()
+{
+    //Two variables, namely username and password are generated of datatype "string"
+    string username , password;
+
+    //the input screen is cleared so the program is neat
+    system ("cls|clear");
+
+    cout << "REGISTER"<<endl;
+
+    //inputs for username and password are taken
+    cout<< "enter username : ";
+    cin >> username;
+    cout<< "enter password : ";
+    cin >> password;
+
+
+    //ofstream is used as we want to write on a file / output on the file
+    //the name of the file object is "reg", a file object is an "access" to the file
+    //any time the name "reg" is used it means you want to access the database.txt file
+    //it will store the data in a file named database.txt
+    ofstream reg("database.txt");
+    //the program checks whether a file named "database.txt" exists in the folder where the source code exists,
+    //if it doesnt, the program will create a file named "database.txt"  itself
+
+
+    reg << username << " " << password << endl; // this is the syntax for inputting data from the user to store the data in the file
+    //this data will be permanently written in the file hence permanently stored for the program , unlike the data achieved by cin
+    //The data will stored as :  one user will be assigned one line and the start of line will have the username, followed by a space
+    //after the space there will be a password
+
+
+    //the code below is to check whether the code for accessing the file is working or not
+    /*
+    if(!reg)
+    {
+        cout<< "not able to open the file" <<endl;
+    }
+    else
+    {
+        cout<< "file opened" <<endl;
+    }
+    */
+
+
+    //screen is cleared again for clarity
+    system( "cls|clear");
+
+    //message to ensure that registeration was successful
+    cout<< "registeration successful! Thank you! "<<endl <<endl;
+
+}
+
+void login()
+{
+    //A boolean valiable is created so that we can check if the details exist or not, set initially to false
+    bool details_exist = false;
+
+    // four string variables are created
+    // the names of the variables themselves tell their use
+    string username_by_user, password_by_user , username_in_databse , password_in_database;
+    system("cls|clear");
+    cout<< "LOGIN FUNCTION"<<endl;
+
+    cout<< "enter username : ";
+    cin >>username_by_user;
+
+    cout<< "enter password : ";
+    cin >> password_by_user;
+
+    //ifstream will extract data from the file to the program
+    ifstream input("database.txt");
+
+    //the program will input the usernames in databse and the passwords in database (all of them can be accessed through using a loop)
+    while( input  >>  username_in_databse  >>  password_in_database )//the loop runs through all the usernames and passwords
+    {
+        if ( username_in_databse == username_by_user && password_in_database == password_by_user )
+        {
+            details_exist = true;// if one of the set matches, the boolean variable "details exist" is set to true
+            break;//the loop is exited as it is no longer needed anymore. and this is beneficial as we can use the bool variable in descision statements ahead
+        }
+    }
+
+    input.close();
+
+    // if the bool is set to true, this if statement is accessed and the program tells that login was successful
+    if ( details_exist == true )
+    {
+        system("cls|clear");
+        //if details_exist is true, and user presses 1, he will be taken to the items list
+        cout << "login is successful "<<endl;
+        customermenu();
+    }
+
+    else
+    {
+        cout<<"login unsuccessful. try again " <<endl;
+        cout << "press 1 to try logging in again" <<endl;
+
+        cin>>choice;
+        //the user is given another chance to login by calling the login function again in this if block;
+        if(choice == 1)
+        {
+           login();
+        }
+    }
+}
+
+void customermenu()
+{
+    cout << "|||||||||||||||||||||||| WELCOME ||||||||||||||||||||||||||||||"<<endl;
+
+}
+
+void administratorlogin()
+{
+        system("cls|clear");
+        cout<< "Enter the admin password to access the administration menu. ";
+        string admins_password = "1";
+        string passwordinput;
+        cin>> passwordinput;
+        if( passwordinput == admins_password)
+            administratormenu();
+        else
+        {
+            system("cls|clear");
+            cout << "Incorrect password. "<<endl;
+            cout << "1- Try again "<<endl;
+            cout << "2- Back to main menu" <<endl<<endl;
+            cout << "enter your choice : ";
+            cin >> choice;
+
+            if (choice == 1)
+                administratorlogin();
+            else if ( choice == 2)
+                mainmenu();
+        }
+}
+
+void administratormenu()
+{
+        system("cls|clear");
+        cout << endl<<endl<<endl;
+        cout<< "                         ADMIN MENU :                 "<<endl;
+        cout<< " 1 - Create Items " <<endl;
+        cout<< " 2 - Display all Items" <<endl;
+        cout<< " 3 - Modify Items" <<endl;
+        cout<< " 4 - Delete Items" <<endl;
+        cout<< " 5 - View Item Menu" <<endl;
+        cout<< " 6 - Back To Main Menu" <<endl;
+
+        cin >> choice;
+
+        if( choice == 1)
+            createitem();
+
+        else if( choice == 2)
+            displayitem();
+
+        else if( choice == 3)
+            modifyitem();
+
+        else if( choice == 4)
+            deleteitem();
+
+        else if( choice == 5)
+            itemmenu();
+
+        else if( choice == 6)
+            mainmenu();
+}
+
+void createitem()
+{
+    cout << "create item function";
+}
+
+void displayitem()
+{
+    cout << "display item";
+}
+
+void modifyitem ()
+{
+    cout << "modify item";
+}
+
+void deleteitem ()
+{
+    cout << "del item";
+}
+
+void itemmenu ()
+{
+    cout << "itemmenu";
+}
+
+void bill()
+{
+    cout << "*******************************************************************"<<endl;
+    cout << "************************** BILL ***********************************"<<endl;
+    cout << "*******************************************************************"<<endl;
+
+}
